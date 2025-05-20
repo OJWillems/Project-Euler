@@ -1,55 +1,66 @@
+import math
+
 # The prime factors of 13,195 are 5, 7, 13, and 29
 # What is the largest prime factor of the number 600,851,475,143
 
-# Option 1 - Calculate Primes first and see if they're factors of n:
-    # Calculate all the prime numbers starting with 29, iterating +2 for each one, until you reach (600,851,475,143 + 1) / 2 and see if it's a factor of 600,851,475,143
-# Option 2 - Calculate factors first (decrementing) and check if they're prime:
-    # Iterate backwards 
-# Option 3 - OK THIS MIGHT BE THE BEST:
-    # Future-Proofing
-        # If n % 2 == 0: Iterate by +1
-        # If n% 2 != 0: Iterate by +2
-    # Start with 2 or 3 depending on the above. If n % i == 0, see if the OTHER factor is prime
-
-# for even numbers, divide n by 2 until it's odd, that's your new i
-
 def main():
-    print(option_3(29))
+    print(find_factors(13195))
+    print(find_factors(600851475143))
 
-# def option_2(n):
-#     increment = None
-#     i = n
-#     if n % 2 == 0:
-#         increment = 1
-#     else:
-#         increment = 2
-#     i = 
-
-def option_3(n):
-    increment = None
+def find_factors(n):
+    upper_bound = n
     i = None
+    iterator = None
+    prime_factor = None
+
+    # Set starting point and iterator depending on if n is even or odd
     if n % 2 == 0:
-        increment = 1
         i = 2
+        iterator = 1
     else:
-        increment = 2
         i = 3
-    while i < (n / 2):
+        iterator = 2
+
+    while i < upper_bound:
+        # print(f"i = {i}")
         if n % i == 0:
-            if is_prime(n / i):
-                return (n / i)
-            else:
-                i += increment
+            if is_prime(i):
+                prime_factor = i
+                print(f"new prime_factor = {prime_factor}")
+            i += iterator
+            upper_bound = int(n/i)
+        else:
+            upper_bound = math.ceil(n/i)
+            i += iterator
+            # print(f"i = {i}, upper_bound = {upper_bound}")
+    return prime_factor
 
-
+# Measure-Command: 56 milliseconds
 def is_prime(n):
-    i = 2
+    i = 3
     for i in range(i, n):
-        if n % i == 0:
+        if n % 2 == 0:
+            return False
+        elif n % i == 0:
             return False
         else:
-            i += 1
+            i += 2
     return True
+
+# Measure-Command: 36 milliseconds
+# THIS HAS FUCKED UP SOMEWHERE
+# def is_prime(n):
+#     i = 3
+#     number = n
+#     while i < n:
+#         if number % 2 == 0:
+#             return False
+#         elif number % i == 0:
+#             return False
+#         else:
+#             i += 2
+#             n = math.ceil(n/i)
+#     return True
 
 if __name__ == "__main__":
     main()
